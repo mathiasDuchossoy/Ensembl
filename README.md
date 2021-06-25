@@ -7,10 +7,15 @@ Le but du jeu est de trouver une cible et de l'éliminer.
 Règle du jeu
 =======
 Le jeu se déroule sur une carte carré de X case de coté.
-La cible est placé aléatoirement en début de jeu sur une position (x,y)
-Le joueur est placé au milieu de la carte en début de partie
-Le joueur peux voir la cible si elle se situe a 2 cases de lui
-Le joueur ne peux pas sortir de la carte
+
+La cible est placé aléatoirement en début de jeu sur une position (x,y).
+
+Le joueur est placé au milieu de la carte en début de partie.
+
+Le joueur peux voir la cible si elle se situe a 2 cases de lui.
+
+Le joueur ne peux pas sortir de la carte.
+
 Le joueur peut se effectuer les actions suivantes :
 * se déplacer en haut
 * se déplacer en bas
@@ -22,16 +27,14 @@ La cible doit être touché trois fois pour être éliminer
 Route du serveurs
 =======
 
-Request
------------
+**Request move**
 ```
 POST /move
 {
   "action": "up|down|left|right"
 }
 ```
-Response
------------
+**Response**
 ```
 {
   "position": {
@@ -45,8 +48,7 @@ Response
 }
 ```
 
-Request
------------
+**Request shoot**
 ```
 POST /shoot
 {
@@ -54,8 +56,7 @@ POST /shoot
   "y": 4
 }
 ```
-Response
------------
+**Response**
 ```
 {
   "result": "touch|miss|kill"
@@ -65,14 +66,13 @@ Response
 Bonus
 =======
 
-Request
------------
+**Request**
 ```
 GET /map
 ```
-Response
------------
-Représentation graphique la carte à l'instant T
+**Response**
+
+Représentation graphique la carte à l'instant T, ça peut être en assci art :-)
 
 Livrable attendu
 =======
