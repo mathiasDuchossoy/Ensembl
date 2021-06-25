@@ -22,7 +22,7 @@ Le joueur peut se effectuer les actions suivantes :
 * se déplacer gauche
 * se déplacer droite
 * tirer sur la cible
-* 
+
 La cible doit être touché trois fois pour être éliminer
 
 Route du serveurs
