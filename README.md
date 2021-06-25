@@ -6,7 +6,7 @@ Le but du jeu est de trouver une cible et de l'éliminer.
 
 Règle du jeu
 =======
-Le jeu se déroule sur une carte carré de X case de coté.
+Le jeu se déroule sur une carte carré de 21 cases de coté.
 
 La cible est placé aléatoirement en début de jeu sur une position (x,y).
 
@@ -22,6 +22,7 @@ Le joueur peut se effectuer les actions suivantes :
 * se déplacer gauche
 * se déplacer droite
 * tirer sur la cible
+* 
 La cible doit être touché trois fois pour être éliminer
 
 Route du serveurs
