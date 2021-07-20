@@ -17,8 +17,26 @@ class Player
      */
     private ?int $id;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Position::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Position $position;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getPosition(): ?Position
+    {
+        return $this->position;
+    }
+
+    public function setPosition(Position $position): self
+    {
+        $this->position = $position;
+
+        return $this;
     }
 }
