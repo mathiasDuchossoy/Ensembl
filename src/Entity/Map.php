@@ -25,6 +25,11 @@ class Map
      */
     private ?Target $target;
 
+    public function __construct(Target $target)
+    {
+        $this->target = $target;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -33,12 +38,5 @@ class Map
     public function getTarget(): ?Target
     {
         return $this->target;
-    }
-
-    public function setTarget(Target $target): self
-    {
-        $this->target = $target;
-
-        return $this;
     }
 }

@@ -27,6 +27,12 @@ class Position
      */
     private ?int $y;
 
+    public function __construct(int $x, int $y)
+    {
+        $this->x = $x;
+        $this->y = $y;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,22 +43,8 @@ class Position
         return $this->x;
     }
 
-    public function setX(int $x): self
-    {
-        $this->x = $x;
-
-        return $this;
-    }
-
     public function getY(): ?int
     {
         return $this->y;
-    }
-
-    public function setY(int $y): self
-    {
-        $this->y = $y;
-
-        return $this;
     }
 }

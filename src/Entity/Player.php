@@ -23,6 +23,11 @@ class Player
      */
     private ?Position $position;
 
+    public function __construct(Position $position)
+    {
+        $this->position = $position;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

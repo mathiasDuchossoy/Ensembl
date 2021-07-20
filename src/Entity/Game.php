@@ -4,9 +4,23 @@ namespace App\Entity;
 
 use App\Repository\GameRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
+ * @ApiResource(
+ *      collectionOperations={
+ *          "post"={
+ *              "method"="POST",
+ *              "route_name"="game_start",
+ *              "read"=false,
+ *              "output"=false,
+ *              "normalization_context"={"groups"={}},
+ *              "denormalization_context"={"groups"={}},
+ *          },
+ *      },
+ *      itemOperations={},
+ * )
  */
 class Game
 {
@@ -29,6 +43,12 @@ class Game
      */
     private ?Player $player;
 
+    public function __construct(Map $map, Player $player)
+    {
+        $this->map = $map;
+        $this->player = $player;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -39,22 +59,8 @@ class Game
         return $this->map;
     }
 
-    public function setMap(Map $map): self
-    {
-        $this->map = $map;
-
-        return $this;
-    }
-
     public function getPlayer(): ?Player
     {
         return $this->player;
-    }
-
-    public function setPlayer(Player $player): self
-    {
-        $this->player = $player;
-
-        return $this;
     }
 }

@@ -23,6 +23,11 @@ class Target
      */
     private ?Position $position;
 
+    public function __construct(Position $position)
+    {
+        $this->position = $position;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,12 +36,5 @@ class Target
     public function getPosition(): ?Position
     {
         return $this->position;
-    }
-
-    public function setPosition(Position $position): self
-    {
-        $this->position = $position;
-
-        return $this;
     }
 }
