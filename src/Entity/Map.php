@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Map
 {
+    public const SQUARES_NUMBER = 21;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
