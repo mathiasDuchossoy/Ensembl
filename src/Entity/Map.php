@@ -15,10 +15,28 @@ class Map
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Target::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Target $target;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTarget(): ?Target
+    {
+        return $this->target;
+    }
+
+    public function setTarget(Target $target): self
+    {
+        $this->target = $target;
+
+        return $this;
     }
 }
