@@ -28,7 +28,12 @@ La cible doit être touché trois fois pour être éliminer
 Route du serveurs
 =======
 
-**Request move**
+**Request start** => Permet de démarrer la partie ou de la remettre à 0 si la partie est deja en cours
+```
+POST /start
+```
+
+**Request move** => Permet au joueur de se déplacer sur la carte
 ```
 POST /move
 {
@@ -49,7 +54,7 @@ POST /move
 }
 ```
 
-**Request shoot**
+**Request shoot** => Permet au joueur de tirer
 ```
 POST /shoot
 {
@@ -67,7 +72,7 @@ POST /shoot
 Bonus
 =======
 
-**Request**
+**Request map** => Permet de visualiser la carte
 ```
 GET /map
 ```
