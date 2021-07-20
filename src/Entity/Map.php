@@ -27,7 +27,7 @@ class Map
      * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $player;
+    private ?Player $player;
 
     public function getId(): ?int
     {
