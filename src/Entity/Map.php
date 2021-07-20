@@ -25,12 +25,6 @@ class Map
      */
     private ?Target $target;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private ?Player $player;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -44,18 +38,6 @@ class Map
     public function setTarget(Target $target): self
     {
         $this->target = $target;
-
-        return $this;
-    }
-
-    public function getPlayer(): ?Player
-    {
-        return $this->player;
-    }
-
-    public function setPlayer(Player $player): self
-    {
-        $this->player = $player;
 
         return $this;
     }
