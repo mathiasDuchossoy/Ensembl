@@ -74,4 +74,25 @@ class PlayerService
 
         return false;
     }
+
+    public function shoot(Target $target, int $shootCoordinateX, int $shootCoordinateY): string
+    {
+        $targetPosition = $target->getPosition();
+
+        if ($shootCoordinateX !== $targetPosition->getX()
+            || $shootCoordinateY !== $targetPosition->getY()) {
+            return Target::STATE_MISS;
+        }
+
+        $touchCount = $target->getTouchCount();
+
+        if (2 === $touchCount) {
+            return Target::STATE_KILL;
+        }
+
+        $target->setTouchCount(++$touchCount);
+        $this->entityManager->flush();
+
+        return Target::STATE_KILL;
+    }
 }

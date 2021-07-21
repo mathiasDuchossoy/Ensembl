@@ -11,12 +11,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PlayerController extends AbstractController
 {
-    /**
-     * @Route("/move", name="move", methods={"POST"})
-     */
-    public function move(Request $request, GameRepository $gameRepository, PlayerService $playerService): JsonResponse
+    private GameRepository $gameRepository;
+    private PlayerService $playerService;
+
+    public function __construct(GameRepository $gameRepository, PlayerService $playerService)
     {
-        $game = $gameRepository->findOneBy([]);
+        $this->gameRepository = $gameRepository;
+        $this->playerService = $playerService;
+    }
+
+    /**
+     * @Route("/move", name="player_move", methods={"POST"})
+     */
+    public function move(Request $request): JsonResponse
+    {
+        $game = $this->gameRepository->findOneBy([]);
 
         if (null === $game) {
             return $this->json('no game.', JsonResponse::HTTP_NOT_FOUND);
@@ -30,7 +39,7 @@ class PlayerController extends AbstractController
 
         $player = $game->getPlayer();
         try {
-            $playerService->move($player, $action);
+            $this->playerService->move($player, $action);
         } catch (\Exception $e) {
             return $this->json($e->getMessage(), JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -39,9 +48,36 @@ class PlayerController extends AbstractController
 
         $response = [
             'position' => $player->getPosition()->jsonSerialize(),
-            'target' => $playerService->isNearTarget($player, $target) ? $target->getPosition()->jsonSerialize() : null,
+            'target' => $this->playerService->isNearTarget($player, $target) ? $target->getPosition()->jsonSerialize() : null,
         ];
 
         return $this->json($response);
+    }
+    /**
+     * @Route("/shoot", name="player_shoot", methods={"POST"})
+     */
+    public function shoot(Request $request): JsonResponse
+    {
+        $game = $this->gameRepository->findOneBy([]);
+
+        if (null === $game) {
+            return $this->json('no game.', JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $x = $request->get('x');
+
+        if (null === $x) {
+            return $this->json('x missing.', JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $y = $request->get('y');
+
+        if (null === $y) {
+            return $this->json('y missing.', JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $state = $this->playerService->shoot($game->getMap()->getTarget(), $x, $y);
+
+        return $this->json(['result' => $state]);
     }
 }
