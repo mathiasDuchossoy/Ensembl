@@ -86,13 +86,13 @@ class PlayerService
 
         $touchCount = $target->getTouchCount();
 
-        if (2 === $touchCount) {
+        $target->incrementTouchCount();
+        $this->entityManager->flush();
+
+        if (3 === $touchCount) {
             return Target::STATE_KILL;
         }
 
-        $target->setTouchCount(++$touchCount);
-        $this->entityManager->flush();
-
-        return Target::STATE_KILL;
+        return Target::STATE_TOUCH;
     }
 }

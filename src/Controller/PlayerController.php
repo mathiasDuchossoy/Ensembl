@@ -53,6 +53,7 @@ class PlayerController extends AbstractController
 
         return $this->json($response);
     }
+
     /**
      * @Route("/shoot", name="player_shoot", methods={"POST"})
      */

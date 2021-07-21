@@ -13,11 +13,6 @@ class Target
     public const STATE_TOUCH = 'touch';
     public const STATE_MISS = 'miss';
     public const STATE_KILL = 'kill';
-    public const STATES = [
-        self::STATE_TOUCH,
-        self::STATE_MISS,
-        self::STATE_KILL,
-    ];
 
     /**
      * @ORM\Id
@@ -57,10 +52,8 @@ class Target
         return $this->touchCount;
     }
 
-    public function setTouchCount(?int $touchCount): self
+    public function incrementTouchCount(): void
     {
-        $this->touchCount = $touchCount;
-
-        return $this;
+        $this->touchCount++;
     }
 }
