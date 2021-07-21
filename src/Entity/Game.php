@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\GameRepository;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
@@ -38,10 +38,11 @@ class Game
     private ?Map $map;
 
     /**
-     * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Player::class, inversedBy="game", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Player $player;
+    private Player $player;
+
 
     public function __construct(Map $map, Player $player)
     {
@@ -59,8 +60,15 @@ class Game
         return $this->map;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): Player
     {
         return $this->player;
+    }
+
+    public function setPlayer(Player $player): self
+    {
+        $this->player = $player;
+
+        return $this;
     }
 }

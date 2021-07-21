@@ -34,6 +34,11 @@ class Player
      */
     private ?Position $position;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Game::class, mappedBy="player")
+     */
+    private ?Game $game;
+
     public function __construct(Position $position)
     {
         $this->position = $position;
@@ -44,7 +49,7 @@ class Player
         return $this->id;
     }
 
-    public function getPosition(): ?Position
+    public function getPosition(): Position
     {
         return $this->position;
     }
@@ -54,5 +59,10 @@ class Player
         $this->position = $position;
 
         return $this;
+    }
+
+    public function getGame(): ?Game
+    {
+        return $this->game;
     }
 }

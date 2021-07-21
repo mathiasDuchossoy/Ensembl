@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\PositionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
  */
-class Position
+class Position implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -43,8 +44,52 @@ class Position
         return $this->x;
     }
 
+    /**
+     * @param int|null $x
+     */
+    public function setX(?int $x): void
+    {
+        $this->x = $x;
+    }
+
     public function getY(): ?int
     {
         return $this->y;
+    }
+
+    /**
+     * @param int|null $y
+     */
+    public function setY(?int $y): void
+    {
+        $this->y = $y;
+    }
+
+    public function up(): void
+    {
+        $this->y++;
+    }
+
+    public function down(): void
+    {
+        $this->y--;
+    }
+
+    public function left(): void
+    {
+        $this->x--;
+    }
+
+    public function right(): void
+    {
+        $this->x++;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'x' => $this->x,
+            'y' => $this->y,
+        ];
     }
 }
