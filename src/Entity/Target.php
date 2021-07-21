@@ -33,7 +33,7 @@ class Target
         return $this->id;
     }
 
-    public function getPosition(): ?Position
+    public function getPosition(): Position
     {
         return $this->position;
     }

@@ -21,12 +21,12 @@ class Position implements JsonSerializable
     /**
      * @ORM\Column(type="smallint")
      */
-    private ?int $x;
+    private int $x;
 
     /**
      * @ORM\Column(type="smallint")
      */
-    private ?int $y;
+    private int $y;
 
     public function __construct(int $x, int $y)
     {
@@ -39,28 +39,22 @@ class Position implements JsonSerializable
         return $this->id;
     }
 
-    public function getX(): ?int
+    public function getX(): int
     {
         return $this->x;
     }
 
-    /**
-     * @param int|null $x
-     */
-    public function setX(?int $x): void
+    public function setX(int $x): void
     {
         $this->x = $x;
     }
 
-    public function getY(): ?int
+    public function getY(): int
     {
         return $this->y;
     }
 
-    /**
-     * @param int|null $y
-     */
-    public function setY(?int $y): void
+    public function setY(int $y): void
     {
         $this->y = $y;
     }

@@ -55,7 +55,7 @@ class Game
         return $this->id;
     }
 
-    public function getMap(): ?Map
+    public function getMap(): Map
     {
         return $this->map;
     }

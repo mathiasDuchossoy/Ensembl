@@ -35,7 +35,7 @@ class Map
         return $this->id;
     }
 
-    public function getTarget(): ?Target
+    public function getTarget(): Target
     {
         return $this->target;
     }

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Player;
+use App\Entity\Target;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PlayerService
@@ -41,5 +42,36 @@ class PlayerService
         }
 
         $this->entityManager->flush();
+    }
+
+    public function isNearTarget(Player $player, Target $target): bool
+    {
+        $playerPosition = $player->getPosition();
+        $playerPositionX = $playerPosition->getX();
+        $playerPositionY = $playerPosition->getY();
+
+        $targetPosition = $target->getPosition();
+        $targetPositionX = $targetPosition->getX();
+        $targetPositionY = $targetPosition->getY();
+
+        if (($playerPositionX - 2 <= $targetPositionX && $targetPositionX <= $playerPositionX + 2)
+            && $playerPositionY === $targetPositionY
+        ) {
+            return true;
+        }
+
+        if (($playerPositionY - 2 <= $targetPositionY && $targetPositionY <= $playerPositionY + 2)
+            && $playerPositionX === $targetPositionX
+        ) {
+            return true;
+        }
+
+        if ($playerPositionX - 1 <= $targetPositionX && $targetPositionX <= $playerPositionX + 1
+            && $playerPositionY - 1 <= $targetPositionY && $targetPositionY <= $playerPositionY + 1
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

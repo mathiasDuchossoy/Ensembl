@@ -35,8 +35,11 @@ class PlayerController extends AbstractController
             return $this->json($e->getMessage(), JsonResponse::HTTP_BAD_REQUEST);
         }
 
+        $target = $game->getMap()->getTarget();
+
         $response = [
             'position' => $player->getPosition()->jsonSerialize(),
+            'target' => $playerService->isNearTarget($player, $target) ? $target->getPosition()->jsonSerialize() : null,
         ];
 
         return $this->json($response);

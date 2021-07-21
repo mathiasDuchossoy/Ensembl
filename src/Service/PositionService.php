@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Map;
 use App\Entity\Position;
+use App\Entity\Target;
 use Exception;
 
 class PositionService
@@ -18,6 +19,14 @@ class PositionService
         }
 
         $position->up();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function throwException(): void
+    {
+        throw new Exception('out of map.');
     }
 
     /**
@@ -54,13 +63,5 @@ class PositionService
         }
 
         $position->right();
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function throwException(): void
-    {
-        throw new Exception('out of map.');
     }
 }
