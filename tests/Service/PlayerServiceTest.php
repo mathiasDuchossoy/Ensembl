@@ -97,8 +97,7 @@ class PlayerServiceTest extends KernelTestCase
         $container = static::getContainer();
         $playerService = $container->get(PlayerService::class);
 
-        $playerPosition = new Position(4, 4);
-        $player = new Player($playerPosition);
+        $player = $this->getPlayer();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('action not exists.');
@@ -107,8 +106,7 @@ class PlayerServiceTest extends KernelTestCase
 
     public function testMoveUp(): void
     {
-        $playerPosition = new Position(4, 4);
-        $player = new Player($playerPosition);
+        $player = $this->getPlayer();
 
         $playerService = $this->getPlayerService('up');
 
