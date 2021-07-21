@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Map;
 use App\Entity\Position;
-use App\Entity\Target;
 use Exception;
 
 class PositionService

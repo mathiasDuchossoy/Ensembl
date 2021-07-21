@@ -6,6 +6,8 @@ use App\Entity\Player;
 use App\Entity\Position;
 use App\Entity\Target;
 use App\Service\PlayerService;
+use App\Service\PositionService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PlayerServiceTest extends KernelTestCase
@@ -26,7 +28,6 @@ class PlayerServiceTest extends KernelTestCase
             $target = new Target($targetPosition);
 
             $isNearTarget = $playerService->isNearTarget($player, $target);
-            echo $wrongPosition[0] . ':' . $wrongPosition[1];
             $this->assertFalse($isNearTarget);
         }
 
@@ -37,7 +38,6 @@ class PlayerServiceTest extends KernelTestCase
             $target = new Target($targetPosition);
 
             $isNearTarget = $playerService->isNearTarget($player, $target);
-            echo $goodPosition[0] . ':' . $goodPosition[1];
             $this->assertTrue($isNearTarget);
         }
     }
@@ -89,5 +89,75 @@ class PlayerServiceTest extends KernelTestCase
             [5, 5],
             [4, 6],
         ];
+    }
+
+    public function testMoveException(): void
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+        $playerService = $container->get(PlayerService::class);
+
+        $playerPosition = new Position(4, 4);
+        $player = new Player($playerPosition);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('action not exists.');
+        $playerService->move($player, 'wrong');
+    }
+
+    public function testMoveUp(): void
+    {
+        $playerPosition = new Position(4, 4);
+        $player = new Player($playerPosition);
+
+        $playerService = $this->getPlayerService('up');
+
+        $playerService->move($player, 'up');
+    }
+
+    private function getPlayerService(string $action): PlayerService
+    {
+        $positionService = $this->createMock(PositionService::class);
+        $positionService->expects($this->once())
+            ->method($action);
+
+        self::bootKernel();
+        $container = static::getContainer();
+        $entityManager = $container->get(EntityManagerInterface::class);
+
+        return new PlayerService($positionService, $entityManager);
+    }
+
+    public function testMoveDown(): void
+    {
+        $player = $this->getPlayer();
+
+        $playerService = $this->getPlayerService('down');
+
+        $playerService->move($player, 'down');
+    }
+
+    private function getPlayer(): Player
+    {
+        $playerPosition = new Position(4, 4);
+        return new Player($playerPosition);
+    }
+
+    public function testMoveRight(): void
+    {
+        $player = $this->getPlayer();
+
+        $playerService = $this->getPlayerService('right');
+
+        $playerService->move($player, 'right');
+    }
+
+    public function testMoveLeft(): void
+    {
+        $player = $this->getPlayer();
+
+        $playerService = $this->getPlayerService('left');
+
+        $playerService->move($player, 'left');
     }
 }
