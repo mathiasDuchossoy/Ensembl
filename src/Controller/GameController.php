@@ -2,13 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Game;
-use App\Entity\Map;
-use App\Entity\Player;
-use App\Entity\Position;
-use App\Entity\Target;
 use App\Service\GameService;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +14,7 @@ class GameController extends AbstractController
      * @Route("/start", name="game_start", methods={"POST"})
      * @throws Exception
      */
-    public function start(GameService $gameService, EntityManagerInterface $entityManager): JsonResponse
+    public function start(GameService $gameService): JsonResponse
     {
         $gameService->purge();
 

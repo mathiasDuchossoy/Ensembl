@@ -31,4 +31,19 @@ class GameServiceTest extends KernelTestCase
 
         $gameService->purge();
     }
+
+    public function testInit(): void
+    {
+        $gameRepository = $this->createMock(GameRepository::class);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->once())
+            ->method('persist');
+        $entityManager->expects($this->once())
+            ->method('flush');
+
+        $gameService = new GameService($entityManager, $gameRepository);
+
+        $gameService->init();
+    }
 }
