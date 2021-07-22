@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Map;
 use App\Entity\Position;
-use App\Entity\Target;
 use Exception;
 
 class PositionService
@@ -46,7 +45,7 @@ class PositionService
      */
     public function left(Position $position): void
     {
-        if ($position->getX() === 0) {
+        if ($position->getX() === 1) {
             $this->throwException();
         }
 

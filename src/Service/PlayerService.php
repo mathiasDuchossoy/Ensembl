@@ -84,12 +84,10 @@ class PlayerService
             return Target::STATE_MISS;
         }
 
-        $touchCount = $target->getTouchCount();
-
         $target->incrementTouchCount();
         $this->entityManager->flush();
 
-        if (3 === $touchCount) {
+        if (3 <= $target->getTouchCount()) {
             return Target::STATE_KILL;
         }
 
