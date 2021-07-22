@@ -2,10 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Game;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 
 class GameService
 {
@@ -29,18 +27,18 @@ class GameService
         $this->entityManager->flush();
     }
 
-    /**
-     * autre exempple de récupération du jeu
-     * @throws EntityNotFoundException
-     */
-    public function getOneOrFail(): Game
-    {
-        $game = $this->gameRepository->findOneBy([]);
-
-        if (null === $game) {
-            throw new EntityNotFoundException('no game.');
-        }
-
-        return $game;
-    }
+//    /**
+//     * autre exempple de récupération du jeu
+//     * @throws EntityNotFoundException
+//     */
+//    public function getOneOrFail(): Game
+//    {
+//        $game = $this->gameRepository->findOneBy([]);
+//
+//        if (null === $game) {
+//            throw new EntityNotFoundException('no game.');
+//        }
+//
+//        return $game;
+//    }
 }

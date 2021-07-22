@@ -45,7 +45,7 @@ class PositionService
      */
     public function left(Position $position): void
     {
-        if ($position->getX() === 0) {
+        if ($position->getX() === 1) {
             $this->throwException();
         }
 
