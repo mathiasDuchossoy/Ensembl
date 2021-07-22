@@ -22,27 +22,15 @@ class PlayerControllerTest extends WebTestCase
         $targetPosition->method('jsonSerialize')
             ->willReturn(['x' => 10, 'y' => 11]);
 
-        $target = $this->createMock(Target::class);
-        $target->method('getPosition')
-            ->willReturn($targetPosition);
-
-        $map = $this->createMock(Map::class);
-        $map->method('getTarget')
-            ->willReturn($target);
+        $target = new Target($targetPosition);
+        $map = new Map($target);
 
         $playerPosition = $this->createMock(Position::class);
         $playerPosition->method('jsonSerialize')
             ->willReturn(['x' => 11, 'y' => 12]);
 
-        $player = $this->createMock(Player::class);
-        $player->method('getPosition')
-            ->willReturn($playerPosition);
-
-        $game = $this->createMock(Game::class);
-        $game->method('getPlayer')
-            ->willReturn($player);
-        $game->method('getMap')
-            ->willReturn($map);
+        $player = new Player($playerPosition);
+        $game = new Game($map, $player);
 
         $gameRepository = $this->createMock(GameRepository::class);
         $gameRepository->expects($this->once())
@@ -54,8 +42,6 @@ class PlayerControllerTest extends WebTestCase
         $playerService = $this->createMock(PlayerService::class);
         $playerService->expects($this->once())
             ->method('move');
-
-        $game->method('getPlayer')->willReturn($player);
 
         $playerService->expects($this->once())
             ->method('isNearTarget')
@@ -87,84 +73,20 @@ class PlayerControllerTest extends WebTestCase
         $this->assertEquals(11, $content['target']['y']);
     }
 
-    public function testMoveWithNoGame()
+    public function testMoveAndIsNotNearTarget(): void
     {
         $client = static::createClient();
         $container = static::getContainer();
-
-        $gameRepository = $this->createMock(GameRepository::class);
-        $gameRepository->expects($this->once())
-            ->method('findOneBy')
-            ->willReturn(null);
-
-        $container->set(GameRepository::class, $gameRepository);
-
-        $client->request('POST', '/move', ['action' => 'up']);
-
-        $this->assertResponseStatusCodeSame(404);
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
-
-        $content = $client->getResponse()->getContent();
-        $this->assertJson($content);
-
-        $content = json_decode($content, true);
-        $this->assertEquals('no game.', $content);
-    }
-
-    public function testMoveWithoutAction()
-    {
-        $client = static::createClient();
-        $container = static::getContainer();
-
-        $game = $this->createMock(Game::class);
-        $gameRepository = $this->createMock(GameRepository::class);
-        $gameRepository->expects($this->once())
-            ->method('findOneBy')
-            ->willReturn($game);
-
-        $container->set(GameRepository::class, $gameRepository);
-        $client->request('POST', '/move');
-
-        $this->assertResponseStatusCodeSame(400);
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
-
-        $content = $client->getResponse()->getContent();
-        $this->assertJson($content);
-
-        $content = json_decode($content, true);
-        $this->assertEquals('action missing.', $content);
-    }
-
-    public function testMoveAndIsNotNearTarget()
-    {
-        $client = static::createClient();
-        $container = static::getContainer();
-
-        $targetPosition = $this->createMock(Position::class);
-        $targetPosition->method('jsonSerialize')
-            ->willReturn(['x' => 5, 'y' => 5]);
 
         $target = $this->createMock(Target::class);
-        $target->method('getPosition')
-            ->willReturn($targetPosition);
-
-        $map = $this->createMock(Map::class);
-        $map->method('getTarget')
-            ->willReturn($target);
+        $map = new Map($target);
 
         $playerPosition = $this->createMock(Position::class);
         $playerPosition->method('jsonSerialize')
             ->willReturn(['x' => 11, 'y' => 12]);
 
-        $player = $this->createMock(Player::class);
-        $player->method('getPosition')
-            ->willReturn($playerPosition);
-
-        $game = $this->createMock(Game::class);
-        $game->method('getPlayer')
-            ->willReturn($player);
-        $game->method('getMap')
-            ->willReturn($map);
+        $player = new Player($playerPosition);
+        $game = new Game($map, $player);
 
         $gameRepository = $this->createMock(GameRepository::class);
         $gameRepository->expects($this->once())
@@ -204,7 +126,55 @@ class PlayerControllerTest extends WebTestCase
         $this->assertEquals(null, $content['target']);
     }
 
-    public function testMoveWithWrongAction()
+    public function testMoveWithoutGame(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $gameRepository = $this->createMock(GameRepository::class);
+        $gameRepository->expects($this->once())
+            ->method('findOneBy')
+            ->willReturn(null);
+
+        $container->set(GameRepository::class, $gameRepository);
+
+        $client->request('POST', '/move', ['action' => 'up']);
+
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+
+        $content = $client->getResponse()->getContent();
+        $this->assertJson($content);
+
+        $content = json_decode($content, true);
+        $this->assertEquals('no game.', $content);
+    }
+
+    public function testMoveWithoutAction(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $game = $this->createMock(Game::class);
+        $gameRepository = $this->createMock(GameRepository::class);
+        $gameRepository->expects($this->once())
+            ->method('findOneBy')
+            ->willReturn($game);
+
+        $container->set(GameRepository::class, $gameRepository);
+        $client->request('POST', '/move');
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+
+        $content = $client->getResponse()->getContent();
+        $this->assertJson($content);
+
+        $content = json_decode($content, true);
+        $this->assertEquals('action missing.', $content);
+    }
+
+    public function testMoveWithWrongAction(): void
     {
         $client = static::createClient();
         $container = static::getContainer();
@@ -234,5 +204,109 @@ class PlayerControllerTest extends WebTestCase
 
         $content = json_decode($content, true);
         $this->assertEquals('action not exists.', $content);
+    }
+
+    public function testShootWithoutGame(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $gameRepository = $this->createMock(GameRepository::class);
+        $gameRepository->method('findOneBy')
+            ->willReturn(null);
+
+        $container->set(GameRepository::class, $gameRepository);
+
+        $client->request('POST', '/shoot');
+
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+
+        $content = $client->getResponse()->getContent();
+        $this->assertJson($content);
+
+        $content = json_decode($content, true);
+        $this->assertEquals('no game.', $content);
+    }
+
+    public function testShootWithX(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $game = $this->createMock(Game::class);
+        $gameRepository = $this->createMock(GameRepository::class);
+        $gameRepository->method('findOneBy')
+            ->willReturn($game);
+
+        $container->set(GameRepository::class, $gameRepository);
+
+        $client->request('POST', '/shoot');
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+
+        $content = $client->getResponse()->getContent();
+        $this->assertJson($content);
+
+        $content = json_decode($content, true);
+        $this->assertEquals('x missing.', $content);
+    }
+
+    public function testShootWithY(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $game = $this->createMock(Game::class);
+        $gameRepository = $this->createMock(GameRepository::class);
+        $gameRepository->method('findOneBy')
+            ->willReturn($game);
+
+        $container->set(GameRepository::class, $gameRepository);
+
+        $client->request('POST', '/shoot', ['x' => 1]);
+
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+
+        $content = $client->getResponse()->getContent();
+        $this->assertJson($content);
+
+        $content = json_decode($content, true);
+        $this->assertEquals('y missing.', $content);
+    }
+
+    public function testShoot(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $game = $this->createMock(Game::class);
+        $gameRepository = $this->createMock(GameRepository::class);
+        $gameRepository->method('findOneBy')
+            ->willReturn($game);
+
+        $container->set(GameRepository::class, $gameRepository);
+
+        $playerService = $this->createMock(PlayerService::class);
+        $playerService->method('shoot')
+            ->willReturn('whatever');
+
+        $container->set(PlayerService::class, $playerService);
+
+        $client->request('POST', '/shoot', ['x' => 1, 'y' => 1]);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+
+        $content = $client->getResponse()->getContent();
+        $this->assertJson($content);
+
+        $content = json_decode($content, true);
+
+        $this->assertArrayHasKey('result', $content);
+        $this->assertEquals('whatever', $content['result']);
     }
 }
