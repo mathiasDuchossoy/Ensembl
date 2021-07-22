@@ -2,6 +2,11 @@
 
 namespace App\Service;
 
+use App\Entity\Game;
+use App\Entity\Map;
+use App\Entity\Player;
+use App\Entity\Position;
+use App\Entity\Target;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -27,18 +32,24 @@ class GameService
         $this->entityManager->flush();
     }
 
-//    /**
-//     * autre exempple de récupération du jeu
-//     * @throws EntityNotFoundException
-//     */
-//    public function getOneOrFail(): Game
-//    {
-//        $game = $this->gameRepository->findOneBy([]);
-//
-//        if (null === $game) {
-//            throw new EntityNotFoundException('no game.');
-//        }
-//
-//        return $game;
-//    }
+    /**
+     * @throws \Exception
+     */
+    public function init(): void
+    {
+        $targetPosition = new Position(random_int(1, Map::SQUARES_NUMBER), random_int(1, Map::SQUARES_NUMBER));
+
+        $target = new Target($targetPosition);
+        $map = new Map($target);
+
+        $mapCenterPosition = round(Map::SQUARES_NUMBER / 2);
+        $playerPosition = new Position($mapCenterPosition, $mapCenterPosition);
+
+        $player = new Player($playerPosition);
+
+        $game = new Game($map, $player);
+
+        $this->entityManager->persist($game);
+        $this->entityManager->flush();
+    }
 }
