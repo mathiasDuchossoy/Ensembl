@@ -23,20 +23,22 @@ class MapService
         $targetPosition = $this->playerService->isNearTarget($player, $target) ? $target->getPosition() : null;
         $playerPosition = $player->getPosition();
 
+        $squaresNumber = Map::SQUARES_NUMBER;
+
         $map = '';
-        for ($x = 1; $x <= Map::SQUARES_NUMBER; $x++) {
+        for ($x = 1; $x <= $squaresNumber; $x++) {
             $map .= '+--';
         }
         $map .= '+' . PHP_EOL;
 
-        for ($y = 1; $y <= Map::SQUARES_NUMBER; $y++) {
+        for ($y = 1; $y <= $squaresNumber; $y++) {
             $map .= '|';
-            for ($x = 1; $x <= Map::SQUARES_NUMBER; $x++) {
+            for ($x = 1; $x <= $squaresNumber; $x++) {
                 $box = $this->getGraphicalBox($targetPosition, $playerPosition, $x, $y);
                 $map .= $box . '|';
             }
             $map .= PHP_EOL;
-            for ($x = 1; $x <= Map::SQUARES_NUMBER; $x++) {
+            for ($x = 1; $x <= $squaresNumber; $x++) {
                 $map .= '+--';
             }
             $map .= '+' . PHP_EOL;
@@ -47,13 +49,13 @@ class MapService
 
     private function getGraphicalBox(?Position $targetPosition, Position $playerPosition, int $x, int $y): string
     {
-        $positionHasSameCoordinates = $this->positionService->hasSameCoordinates($targetPosition, $x, $y);
+        $targetHasSameCoordinates = $this->positionService->hasSameCoordinates($targetPosition, $x, $y);
         $playerHasSameCoordinates = $this->positionService->hasSameCoordinates($playerPosition, $x, $y);
 
-        if ($positionHasSameCoordinates && $playerHasSameCoordinates) {
+        if ($targetHasSameCoordinates && $playerHasSameCoordinates) {
             return 'pc';
         }
-        if ($positionHasSameCoordinates) {
+        if ($targetHasSameCoordinates) {
             return ' c';
         }
         if ($playerHasSameCoordinates) {
