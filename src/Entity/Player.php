@@ -14,12 +14,6 @@ class Player
     public const DOWN = 'down';
     public const LEFT = 'left';
     public const RIGHT = 'right';
-    public const ACTIONS = [
-        self::UP,
-        self::DOWN,
-        self::LEFT,
-        self::RIGHT,
-    ];
 
     /**
      * @ORM\Id
@@ -34,11 +28,6 @@ class Player
      */
     private ?Position $position;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Game::class, mappedBy="player")
-     */
-    private ?Game $game;
-
     public function __construct(Position $position)
     {
         $this->position = $position;
@@ -52,17 +41,5 @@ class Player
     public function getPosition(): Position
     {
         return $this->position;
-    }
-
-    public function setPosition(Position $position): self
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    public function getGame(): ?Game
-    {
-        return $this->game;
     }
 }
