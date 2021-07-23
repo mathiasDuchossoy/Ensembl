@@ -11,7 +11,7 @@ class PositionServiceTest extends KernelTestCase
     /**
      * @var PositionService|object|null
      */
-    private $playerService;
+    private $positionService;
 
     public function testDown(): void
     {
@@ -21,11 +21,11 @@ class PositionServiceTest extends KernelTestCase
             ->method('getY')
             ->willReturnOnConsecutiveCalls(2, 1);
 
-        $this->playerService->down($position);
+        $this->positionService->down($position);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('out of map.');
-        $this->playerService->down($position);
+        $this->positionService->down($position);
     }
 
     private function getPosition(string $method)
@@ -46,11 +46,11 @@ class PositionServiceTest extends KernelTestCase
             ->method('getX')
             ->willReturn(20, 21);
 
-        $this->playerService->right($position);
+        $this->positionService->right($position);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('out of map.');
-        $this->playerService->right($position);
+        $this->positionService->right($position);
     }
 
     public function testUp(): void
@@ -61,11 +61,11 @@ class PositionServiceTest extends KernelTestCase
             ->method('getY')
             ->willReturn(20, 21);
 
-        $this->playerService->up($position);
+        $this->positionService->up($position);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('out of map.');
-        $this->playerService->up($position);
+        $this->positionService->up($position);
     }
 
     public function testLeft(): void
@@ -76,11 +76,27 @@ class PositionServiceTest extends KernelTestCase
             ->method('getX')
             ->willReturn(2, 1);
 
-        $this->playerService->left($position);
+        $this->positionService->left($position);
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('out of map.');
-        $this->playerService->left($position);
+        $this->positionService->left($position);
+    }
+
+    public function testHasSameCoordinates(): void
+    {
+        $position = new Position(1, 2);
+
+        $hasSameCoordinates = $this->positionService->hasSameCoordinates($position, 1, 2);
+        $this->assertEquals(true, $hasSameCoordinates);
+    }
+
+    public function testHasNotSameCoordinates(): void
+    {
+        $position = new Position(1, 3);
+
+        $hasSameCoordinates = $this->positionService->hasSameCoordinates($position, 1, 2);
+        $this->assertEquals(false, $hasSameCoordinates);
     }
 
     protected function setUp(): void
@@ -89,6 +105,6 @@ class PositionServiceTest extends KernelTestCase
 
         self::bootKernel();
         $container = static::getContainer();
-        $this->playerService = $container->get(PositionService::class);
+        $this->positionService = $container->get(PositionService::class);
     }
 }

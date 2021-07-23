@@ -63,4 +63,9 @@ class PositionService
 
         $position->right();
     }
+
+    public function hasSameCoordinates(?Position $position, int $x, int $y): bool
+    {
+        return null !== $position && $y === $position->getY() && $x === $position->getX();
+    }
 }
