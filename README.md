@@ -1,3 +1,25 @@
+Installation
+=======
+
+Install the dependencies
+```bash
+$ composer install
+```
+Create and install the database.
+The db will be create with sqlite (you have to enable the extension in php.ini) in the folder "var/data.db"
+```bash
+$ php bin/console doctrine:database:create
+$ php bin/console doctrine:migrations:migrate
+```
+
+Usage
+=======
+
+You can use the symfony server to use the api:
+```bash
+$ symfony server:start
+```
+
 Objectifs
 =======
 
