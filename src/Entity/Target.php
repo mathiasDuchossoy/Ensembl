@@ -30,7 +30,7 @@ class Target
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $touchCount;
+    private int $touchCount = 0;
 
     public function __construct(Position $position)
     {

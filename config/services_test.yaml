@@ -1,0 +1,10 @@
+services:
+    App\Service\GameService:
+        public: true
+        autowire: true
+    App\Repository\GameRepository:
+        public: true
+        autowire: true
+    App\Service\PlayerService:
+        public: true
+        autowire: true
