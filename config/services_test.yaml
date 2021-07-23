@@ -8,3 +8,6 @@ services:
     App\Service\PlayerService:
         public: true
         autowire: true
+    App\Service\MapService:
+        public: true
+        autowire: true
