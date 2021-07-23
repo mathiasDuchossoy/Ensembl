@@ -38,7 +38,7 @@ class Game
     private ?Map $map;
 
     /**
-     * @ORM\OneToOne(targetEntity=Player::class, inversedBy="game", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Player::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private Player $player;
