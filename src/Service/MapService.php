@@ -31,18 +31,25 @@ class MapService
         }
         $map .= '+' . PHP_EOL;
 
-        for ($y = 1; $y <= $squaresNumber; $y++) {
+        for ($y = $squaresNumber; $y > 0; $y--) {
             $map .= '|';
             for ($x = 1; $x <= $squaresNumber; $x++) {
                 $box = $this->getGraphicalBox($targetPosition, $playerPosition, $x, $y);
                 $map .= $box . '|';
             }
-            $map .= PHP_EOL;
+            $map .= $y . PHP_EOL;
             for ($x = 1; $x <= $squaresNumber; $x++) {
                 $map .= '+--';
             }
             $map .= '+' . PHP_EOL;
         }
+
+        $map .= '';
+        for ($x = 1; $x <= $squaresNumber; $x++) {
+            $map .= $x < 10 ? '  ' : ' ';
+            $map .= $x;
+        }
+        $map .= ' ' . PHP_EOL;
 
         return $map;
     }
