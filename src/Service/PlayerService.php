@@ -54,25 +54,31 @@ class PlayerService
         $targetPositionX = $targetPosition->getX();
         $targetPositionY = $targetPosition->getY();
 
-        if (($playerPositionX - 2 <= $targetPositionX && $targetPositionX <= $playerPositionX + 2)
-            && $playerPositionY === $targetPositionY
+        if ($playerPositionY === $targetPositionY
+            && $this->isInRange($playerPositionX, $targetPositionX, 2)
         ) {
             return true;
         }
 
-        if (($playerPositionY - 2 <= $targetPositionY && $targetPositionY <= $playerPositionY + 2)
-            && $playerPositionX === $targetPositionX
+        if ($playerPositionX === $targetPositionX
+            && $this->isInRange($playerPositionY, $targetPositionY, 2)
         ) {
             return true;
         }
 
-        if ($playerPositionX - 1 <= $targetPositionX && $targetPositionX <= $playerPositionX + 1
-            && $playerPositionY - 1 <= $targetPositionY && $targetPositionY <= $playerPositionY + 1
+        if ($this->isInRange($playerPositionX, $targetPositionX, 1)
+            && $this->isInRange($playerPositionY, $targetPositionY, 1)
         ) {
             return true;
         }
 
         return false;
+    }
+
+    private function isInRange(int $playerPositionAxe, int $targetPositionAxe, int $intervalValue): bool
+    {
+        return $targetPositionAxe - $intervalValue <= $playerPositionAxe
+            && $targetPositionAxe + $intervalValue >= $playerPositionAxe;
     }
 
     public function shoot(Target $target, int $shootCoordinateX, int $shootCoordinateY): string
