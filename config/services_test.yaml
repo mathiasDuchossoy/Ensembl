@@ -1,13 +1,9 @@
 services:
-    App\Service\GameService:
-        public: true
+    _defaults:
         autowire: true
-    App\Repository\GameRepository:
         public: true
-        autowire: true
-    App\Service\PlayerService:
-        public: true
-        autowire: true
-    App\Service\MapService:
-        public: true
-        autowire: true
+
+    App\Service\GameService: ~
+    App\Repository\GameRepository: ~
+    App\Service\PlayerService: ~
+    App\Service\MapService: ~
