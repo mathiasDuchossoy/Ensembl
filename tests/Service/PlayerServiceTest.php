@@ -12,83 +12,46 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PlayerServiceTest extends KernelTestCase
 {
-    public function testIsNearTarget(): void
+    /**
+     * @dataProvider getWrongPositions
+     */
+    public function testIsNearTargetWithWrongPositions($x, $y): void
     {
         self::bootKernel();
         $container = static::getContainer();
         $playerService = $container->get(PlayerService::class);
 
+        $player = $this->getPlayer();
+
+        $targetPosition = new Position($x, $y);
+        $target = new Target($targetPosition);
+
+        $isNearTarget = $playerService->isNearTarget($player, $target);
+        $this->assertFalse($isNearTarget);
+    }
+
+    private function getPlayer(): Player
+    {
         $playerPosition = new Position(4, 4);
-        $player = new Player($playerPosition);
-
-        $wrongPositions = $this->getWrongPositions();
-
-        foreach ($wrongPositions as $wrongPosition) {
-            $targetPosition = new Position($wrongPosition[0], $wrongPosition[1]);
-            $target = new Target($targetPosition);
-
-            $isNearTarget = $playerService->isNearTarget($player, $target);
-            $this->assertFalse($isNearTarget);
-        }
-
-        $goodPositions = $this->getGoodPositions();
-
-        foreach ($goodPositions as $goodPosition) {
-            $targetPosition = new Position($goodPosition[0], $goodPosition[1]);
-            $target = new Target($targetPosition);
-
-            $isNearTarget = $playerService->isNearTarget($player, $target);
-            $this->assertTrue($isNearTarget);
-        }
+        return new Player($playerPosition);
     }
 
-    private function getWrongPositions(): array
+    /**
+     * @dataProvider getRightPositions
+     */
+    public function testIsNearTargetWithRightPositions($x, $y): void
     {
-        return [
-            [3, 1],
-            [4, 1],
-            [5, 1],
-            [2, 2],
-            [3, 2],
-            [5, 2],
-            [6, 2],
-            [1, 3],
-            [2, 3],
-            [6, 3],
-            [7, 3],
-            [1, 4],
-            [7, 4],
-            [1, 5],
-            [2, 5],
-            [6, 5],
-            [7, 5],
-            [2, 6],
-            [3, 6],
-            [5, 6],
-            [6, 6],
-            [3, 7],
-            [4, 7],
-            [5, 7],
-        ];
-    }
+        self::bootKernel();
+        $container = static::getContainer();
+        $playerService = $container->get(PlayerService::class);
 
-    private function getGoodPositions(): array
-    {
-        return [
-            [4, 2],
-            [3, 3],
-            [4, 3],
-            [5, 3],
-            [2, 4],
-            [3, 4],
-            [4, 4],
-            [5, 4],
-            [6, 4],
-            [3, 5],
-            [4, 5],
-            [5, 5],
-            [4, 6],
-        ];
+        $player = $this->getPlayer();
+
+        $targetPosition = new Position($x, $y);
+        $target = new Target($targetPosition);
+
+        $isNearTarget = $playerService->isNearTarget($player, $target);
+        $this->assertTrue($isNearTarget);
     }
 
     public function testMoveException(): void
@@ -102,12 +65,6 @@ class PlayerServiceTest extends KernelTestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('action not exists.');
         $playerService->move($player, 'wrong');
-    }
-
-    private function getPlayer(): Player
-    {
-        $playerPosition = new Position(4, 4);
-        return new Player($playerPosition);
     }
 
     public function testMoveUp(): void
@@ -181,5 +138,54 @@ class PlayerServiceTest extends KernelTestCase
 
         $state = $playerService->shoot($target, 4, 4);
         $this->assertEquals('kill', $state);
+    }
+
+    public function getWrongPositions(): array
+    {
+        return [
+            [3, 1],
+            [4, 1],
+            [5, 1],
+            [2, 2],
+            [3, 2],
+            [5, 2],
+            [6, 2],
+            [1, 3],
+            [2, 3],
+            [6, 3],
+            [7, 3],
+            [1, 4],
+            [7, 4],
+            [1, 5],
+            [2, 5],
+            [6, 5],
+            [7, 5],
+            [2, 6],
+            [3, 6],
+            [5, 6],
+            [6, 6],
+            [3, 7],
+            [4, 7],
+            [5, 7],
+        ];
+    }
+
+    public function getRightPositions(): array
+    {
+        return [
+            [4, 2],
+            [3, 3],
+            [4, 3],
+            [5, 3],
+            [2, 4],
+            [3, 4],
+            [4, 4],
+            [5, 4],
+            [6, 4],
+            [3, 5],
+            [4, 5],
+            [5, 5],
+            [4, 6],
+        ];
     }
 }
